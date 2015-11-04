@@ -74,10 +74,22 @@ function _addUniqueIdsToDocs(ramlObj) {
   return ramlObj;
 }
 
+function _parseSchemas(ramlObj) {
+  ramlObj.parsedSchemas = ramlObj.parsedSchemas || {};
+  for (var schemaIx in ramlObj.schemas) {
+    for (var schemaName in ramlObj.schemas[schemaIx]) {
+      ramlObj.parsedSchemas[schemaName] = JSON.parse(ramlObj.schemas[schemaIx][schemaName]);
+    }
+  }
+
+  return ramlObj;
+}
+
 function _enhanceRamlObj(ramlObj) {
   ramlObj = _parseBaseUri(ramlObj);
   ramlObj = _traverse(ramlObj);
-  return _addUniqueIdsToDocs(ramlObj);
+  ramlObj = _addUniqueIdsToDocs(ramlObj);
+  return _parseSchemas(ramlObj);
 }
 
 function _sourceToRamlObj(source) {
