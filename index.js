@@ -97,10 +97,11 @@ function _enhanceRamlObj(ramlObj) {
 }
 
 function _sourceToRamlObj(source) {
+  var settings = {validate: false};
   if (typeof source === 'string') {
     if (fs.existsSync(source) || source.indexOf('http') === 0) {
       // Parse as file or url
-      return raml.loadFile(source);
+      return raml.loadFile(source, settings);
     }
 
     // Parse as string or buffer
