@@ -31,8 +31,11 @@ function _traverse(ramlObj, parentUrl, allUriParameters) {
   for (var index in ramlObj.resources) {
     if (ramlObj.resources.hasOwnProperty(index)) {
       var resource = ramlObj.resources[index];
+
       resource.parentUrl = parentUrl || '';
       resource.uniqueId = _makeUniqueId(resource);
+      resource.relativeUri = resource.relativeUri.replace(/\{([^0-9]+)[0-9]\}/, '{$1}');
+
       resource.allUriParameters = [];
 
       if (allUriParameters) {
@@ -42,6 +45,7 @@ function _traverse(ramlObj, parentUrl, allUriParameters) {
       if (resource.uriParameters) {
         for (var key in resource.uriParameters) {
           if (resource.uriParameters.hasOwnProperty(key)) {
+            resource.uriParameters[key].displayName = resource.uriParameters[key].displayName.replace(/^([^0-9]+)[0-9]$/, '$1');
             resource.allUriParameters.push(resource.uriParameters[key]);
           }
         }
