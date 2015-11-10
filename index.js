@@ -89,11 +89,19 @@ function _parseSchemas(ramlObj) {
   return ramlObj;
 }
 
+function _renameErrors(ramlObj) {
+	// errors are added in the format "(error)" to the RAML document. As this cannot be parsed in nunjucks
+	ramlObj.errors = ramlObj["(errors)"];
+	ramlObj["(errors)"] = undefined;
+  return ramlObj;
+}
+
 function _enhanceRamlObj(ramlObj) {
   ramlObj = _parseBaseUri(ramlObj);
   ramlObj = _traverse(ramlObj);
   ramlObj = _addUniqueIdsToDocs(ramlObj);
-  return _parseSchemas(ramlObj);
+  ramlObj = _parseSchemas(ramlObj);
+  return _renameErrors(ramlObj);
 }
 
 function _sourceToRamlObj(source) {
